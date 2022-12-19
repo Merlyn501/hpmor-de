@@ -7,7 +7,7 @@ use File::Spec::Functions;
   'hpmor',
   'hpmor-1', 'hpmor-2', 'hpmor-3', 'hpmor-4', 'hpmor-5', 'hpmor-6',
   'layout/hpmor-dust-jacket-1', 'layout/hpmor-dust-jacket-2',
-  'layout/hpmor-dust-jacket-3', 'layout/hpmor-dust-jacket-4', 
+  'layout/hpmor-dust-jacket-3', 'layout/hpmor-dust-jacket-4',
   'layout/hpmor-dust-jacket-5', 'layout/hpmor-dust-jacket-6',
   'layout/test',
  );
@@ -24,7 +24,7 @@ if (-d $hooks_dir) {
       my $mode = (stat($hook))[2];
       chmod $mode | 0111, $hook;
     }
-    system "git", "checkout", "master"; # Generate .git/gitHeadInfo.gin
+    system "git", "checkout", "main"; # Generate .git/gitHeadInfo.gin
   }
 }
 

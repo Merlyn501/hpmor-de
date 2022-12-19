@@ -1,10 +1,15 @@
+#!/usr/bin/env python3
+"""
+Cleanup LaTeX Code.
+"""
 import glob
 import os
 import re
 import sys
 
-# my helper
 import helper
+
+# my helper
 
 os.chdir(os.path.dirname(sys.argv[0]))
 
@@ -19,11 +24,16 @@ for translator in translations.keys():
 
 
 def loop_files_for_cleanup():
+    """
+    Loop over all files.
+
+    Call cleanup_latex()
+    """
     for translator in translators:
         print("===" + translator + "===")
         for fileIn in sorted(glob.glob(f"4-latex/{translator}/*.tex")):
             fileOut = fileIn.replace("4-latex/", "5-latex-clean/")
-            with open(fileIn, mode="r", encoding="utf-8") as fh:
+            with open(fileIn, encoding="utf-8") as fh:
                 cont = fh.read()
             cont = cleanup_latex(s=cont)
             with open(fileOut, mode="w", encoding="utf-8", newline="\n") as fh:
@@ -31,6 +41,9 @@ def loop_files_for_cleanup():
 
 
 def cleanup_latex(s):
+    """
+    Clean LaTeX Code.
+    """
     # end of line
     s = re.sub(r"\r\n", "\n", s)
     s = re.sub(r"^.*\\begin\{document\}", "", s, flags=re.DOTALL)
@@ -46,8 +59,8 @@ def cleanup_latex(s):
     s = s.replace("{}", "")
     s = re.sub(r"(?<=\n)\\hfill\\break *", r"", s)
     # s = re.sub(r"(?<=\n)\\hypertarget.*$", r"", s)
-    s = s.replace("\maketitle", "")
-    s = s.replace("\ldots", "…")
+    s = s.replace(r"\maketitle", "")
+    s = s.replace(r"\ldots", "…")
     s = s.replace("\\\\", "\n\n")
 
     # empty lines
@@ -79,13 +92,16 @@ def cleanup_latex(s):
         s = fix_hyphens(s)
         s = fix_spaces(s)
         lines2.append(s)
-        s = re.sub(r"\\textbf\{\\emph\{(.*?)\}\}", r"\\parsel{\1}", s) # not working...
-        s = s.replace("\\textbf{\\emph{", "\parsel{")
+        s = re.sub(r"\\textbf\{\\emph\{(.*?)\}\}", r"\\parsel{\1}", s)  # not working...
+        s = s.replace("\\textbf{\\emph{", r"\parsel{")
     s = "\n".join(lines2)
     return s
 
 
 def fix_spaces(s: str) -> str:
+    """
+    Fix spaces.
+    """
     # trailing spaces
     s = re.sub(r" +$", "", s)
     # remove spaces from empty lines

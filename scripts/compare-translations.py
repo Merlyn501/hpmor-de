@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-
 # by Torben Menke https://entorb.net
+"""
+Compare chapters between translations.
 
-# downloads other translation chapter files
-# chapter-wise comparison of my version to other language
-#   by counting the use of LaTeX commands like \parsel etc.s
-
+downloads other translation chapter files
+chapter-wise comparison of my version to other language
+by counting the use of LaTeX commands like parsel etc.s
+"""
 import os
 import re
-import requests
 import sys
+
+import requests
 
 list_of_latex_commands_to_search_for = [
     "\\chapter",
@@ -53,16 +55,19 @@ translations = {
 
 
 def download_file(url: str, filepath: str):
-    """download file from url to filepath"""
+    """
+    Download file from url to filepath.
+    """
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:75.0) Gecko/20100101 Firefox/75.0 ",
     }
-    cont = requests.get(url, headers=headers, verify=True).content
+    cont = requests.get(url, headers=headers, verify=True, timeout=3).content
     # verify=False -> skip SSL cert verification: CERTIFICATE_VERIFY_FAILED
     with open(filepath, mode="bw") as fh:
         fh.write(cont)
 
 
+# TODO: master -> main in case the others migrate
 def download_all_chapters():
     baseurl = "https://raw.githubusercontent.com/<<repo>>/master/chapters/hpmor-chapter-<<chapter-no>>.tex"
 
@@ -84,22 +89,25 @@ def download_all_chapters():
 
 def get_list_of_my_chapter_files() -> list:
     """
-    reads hpmor.tex, extract list of (not-commented out) chapter files
+    Read hpmor.tex, extract list of (not-commented out) chapter files.
+
     returns list of filesnames
     """
     list_of_chapter_files = []
-    with open("../hpmor.tex", mode="r", encoding="utf-8") as fh:
+    with open("../hpmor.tex", encoding="utf-8") as fh:
         lines = fh.readlines()
-    lines = [elem for elem in lines if elem.startswith("\include{chapters/")]
+    lines = [elem for elem in lines if elem.startswith(r"\include{chapters/")]
     for line in lines:
-        fileName = re.search("^.*include\{chapters/(.+?)\}.*$", line).group(1)
+        my_match = re.search(r"^.*include\{chapters/(.+?)\}.*$", line)
+        assert my_match
+        fileName = my_match.group(1)
         list_of_chapter_files.append(fileName + ".tex")
     return list_of_chapter_files
 
 
 def remove_comments(cont: str) -> str:
     """
-    removes Latex comments from file contents
+    Remove Latex comments from file contents.
     """
     # fix end of line
     cont = re.sub(r"\r\n?", r"\n", cont)
@@ -107,7 +115,7 @@ def remove_comments(cont: str) -> str:
     l_cont_clean = []
     # remove comments
     for line in l_cont:
-        if re.match("^\s*%", line):
+        if re.match(r"^\s*%", line):
             continue
         line = re.sub(r"(?<!\\)%.+", "", line)
         l_cont_clean.append(line)
@@ -124,28 +132,28 @@ def count_latex_commands(cont: str) -> dict:
     return res
 
 
-def compare_to_lang(myFiles: list, lang="en"):
-    for myFile in myFiles:
+def compare_to_lang(my_files: list, lang="en"):
+    for myFile in my_files:
         ch_no = myFile[14:17]
         # in DE I added a prefix to the files, so this would not work for lang == "de"
         otherFile = f"translation-{lang}/hpmor-chapter-{ch_no}.tex"
 
-        with open(myFile, mode="r", encoding="utf-8") as fh:
+        with open(myFile, encoding="utf-8") as fh:
             cont = fh.read()
         cont = remove_comments(cont)
-        res_myFile = count_latex_commands(cont)
+        res_my_file = count_latex_commands(cont)
 
-        with open(otherFile, mode="r", encoding="utf-8") as fh:
+        with open(otherFile, encoding="utf-8") as fh:
             cont = fh.read()
         cont = remove_comments(cont)
-        res_otherFile = count_latex_commands(cont)
+        res_other_file = count_latex_commands(cont)
 
         has_finding = False
         for command in list_of_latex_commands_to_search_for:
-            c_myFile = res_myFile[command]
-            c_otherFile = res_otherFile[command]
+            c_myFile = res_my_file[command]
+            c_otherFile = res_other_file[command]
             if c_myFile != c_otherFile:
-                if has_finding == False:
+                if has_finding is False:
                     has_finding = True
                     print(myFile)
                 print(f" {command}: {c_myFile} vs. {c_otherFile}")
@@ -155,4 +163,4 @@ def compare_to_lang(myFiles: list, lang="en"):
 if __name__ == "__main__":
     download_all_chapters()
     myFiles = get_list_of_my_chapter_files()
-    compare_to_lang(myFiles=myFiles, lang=other_lang)
+    compare_to_lang(my_files=myFiles, lang=other_lang)

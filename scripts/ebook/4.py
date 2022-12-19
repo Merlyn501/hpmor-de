@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-
 # by Torben Menke https://entorb.net
-
-
+"""
+Parselify flattened .tex file.
+"""
 import os
 import re
 import sys
 
-os.chdir(os.path.dirname(sys.argv[0]) + "/..")
+os.chdir(os.path.dirname(sys.argv[0]) + "/../..")
 
-source_file = "hpmor-epub-3-flatten-mod1.tex"
-target_file = "hpmor-epub-4-flatten-mod2.tex"
+source_file = "tmp/hpmor-epub-3-flatten-mod.tex"
+target_file = "tmp/hpmor-epub-4-flatten-parsel.tex"
 
 print("=== 4. parselify flattened file in python ===")
 
@@ -29,7 +29,7 @@ def convert_parsel(s: str) -> str:
     return s
 
 
-with open(source_file, mode="r", encoding="utf-8", newline="\n") as fhIn:
+with open(source_file, encoding="utf-8", newline="\n") as fhIn:
     cont = fhIn.read()
 
 

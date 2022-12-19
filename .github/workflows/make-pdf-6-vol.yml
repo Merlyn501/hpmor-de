@@ -1,24 +1,25 @@
-name: build 6 single volume PDFs
+name: build PDF 6 single volumes
 on:
   workflow_dispatch:
-  
+
 jobs:
   hpmor-1:
     runs-on: ubuntu-22.04
     steps:
     - name: checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: master
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
 
 #    - name: setup environment to DE lang
 #      run: |
 #        cd /usr/share/locales
-#        sudo ./install-language-pack de_DE.UTF-8   
+#        sudo ./install-language-pack de_DE.UTF-8
 
     - name: install requirements
-      run: sh scripts/install_requirements_pdf.sh > /dev/null
+      run: |
+        sudo apt update > /dev/null
+        sh scripts/install_requirements_pdf.sh > /dev/null
 
     - name: latexmk
       run: latexmk hpmor-1 > /dev/null
@@ -34,15 +35,14 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: master
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
 
 #    - name: setup environment to DE lang
 #      run: |
 #        cd /usr/share/locales
-#        sudo ./install-language-pack de_DE.UTF-8   
+#        sudo ./install-language-pack de_DE.UTF-8
 
     - name: install requirements
       run: sh scripts/install_requirements_pdf.sh > /dev/null
@@ -61,15 +61,14 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: master
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
 
  #   - name: setup environment to DE lang
  #     run: |
  #       cd /usr/share/locales
- #       sudo ./install-language-pack de_DE.UTF-8   
+ #       sudo ./install-language-pack de_DE.UTF-8
 
     - name: install requirements
       run: sh scripts/install_requirements_pdf.sh > /dev/null
@@ -88,15 +87,14 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: master
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
 
 #    - name: setup environment to DE lang
 #      run: |
 #        cd /usr/share/locales
-#        sudo ./install-language-pack de_DE.UTF-8   
+#        sudo ./install-language-pack de_DE.UTF-8
 
     - name: install requirements
       run: sh scripts/install_requirements_pdf.sh > /dev/null
@@ -115,15 +113,14 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: master
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
 
  #   - name: setup environment to DE lang
  #     run: |
  #       cd /usr/share/locales
- #       sudo ./install-language-pack de_DE.UTF-8   
+ #       sudo ./install-language-pack de_DE.UTF-8
 
     - name: install requirements
       run: sh scripts/install_requirements_pdf.sh > /dev/null
@@ -142,15 +139,14 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: master
         persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
 
 #    - name: setup environment to DE lang
 #      run: |
 #        cd /usr/share/locales
-#        sudo ./install-language-pack de_DE.UTF-8   
+#        sudo ./install-language-pack de_DE.UTF-8
 
     - name: install requirements
       run: sh scripts/install_requirements_pdf.sh > /dev/null
